@@ -12,11 +12,25 @@ export class AppComponent {
   title = 'Advanced-Asynchronous-JavaScript';
 
   constructor() {
-    const subscription = this.timeOut(500).subscribe({
+    // const subscription = this.timeOut(500).subscribe({
+    //   next: (value) => {
+    //     console.log('next - value', value);
+    //   },
+    //   error(e: any): void {
+    //     console.log('error');
+    //   },
+    //   complete(): void {
+    //     console.log('complete');
+    //   }
+    // });
+
+    const bodyEl: Element = document.querySelector('body');
+
+    this.fromEvent('click', bodyEl).subscribe({
       next: (value) => {
-        console.log('next - value', value);
+        console.log('next', value);
       },
-      error(error: any): void {
+      error(e: any): void {
         console.log('error');
       },
       complete(): void {
@@ -34,6 +48,22 @@ export class AppComponent {
 
       return {
         unsubscribe: () => clearTimeout(handle)
+      };
+    });
+  }
+
+  fromEvent(eventName: string, element: Element): Observable {
+    return new Observable((observer: Observer): Subscribe => {
+      const handler = (event) => {
+        observer.next(event);
+      };
+
+      element.addEventListener(eventName, handler);
+
+      return {
+        unsubscribe: () => {
+          element.removeEventListener(eventName, handler);
+        }
       };
     });
   }
