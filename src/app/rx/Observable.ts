@@ -15,7 +15,7 @@ export class Observable {
 
   map(projection: (a: any) => any) {
     return new Observable((observer: Observer) => {
-      const previousSubscription = this.subscribe({
+      return this.subscribe({
         next: (result: any) => {
           observer.next(projection(result));
         },
@@ -26,12 +26,6 @@ export class Observable {
           observer.complete();
         }
       });
-
-      return {
-        unsubscribe: () => {
-          previousSubscription.unsubscribe();
-        }
-      };
     });
   }
 }
