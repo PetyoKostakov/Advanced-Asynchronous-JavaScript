@@ -41,9 +41,28 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const fromEventSubscribe = this.fromEvent('click', document.getElementById('button'))
-      .map((event: Event) => {
-        return event.target;
+    // const fromEventSubscribe = this.fromEvent('click', document.getElementById('button'))
+    //   .map((event: Event) => {
+    //     return event.target;
+    //   })
+    //   .subscribe({
+    //     next: (eventTarget) => {
+    //       console.log('next', eventTarget);
+    //     },
+    //     error(e: any): void {
+    //       console.log('error');
+    //     },
+    //     complete(): void {
+    //       console.log('complete');
+    //     }
+    //   });
+
+    const fromEventSubscribe = this.fromEvent('click', document.querySelector('body'))
+      .map((event: any) => {
+        return event.clientX;
+      })
+      .filter((clientX: number) => {
+        return clientX > 50;
       })
       .subscribe({
         next: (eventTarget) => {

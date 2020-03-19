@@ -28,4 +28,24 @@ export class Observable {
       });
     });
   }
+
+  filter(predicate: (a: any) => any) {
+    return new Observable((observer: Observer) => {
+      return this.subscribe({
+        next: (prevResult: any) => {
+          const result = predicate(prevResult);
+
+          if (result) {
+            observer.next(result);
+          }
+        },
+        error(e: any): void {
+          observer.error(e);
+        },
+        complete(): void {
+          observer.complete();
+        }
+      });
+    });
+  }
 }
