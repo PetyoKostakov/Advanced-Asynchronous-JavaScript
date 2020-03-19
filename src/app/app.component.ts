@@ -1,14 +1,15 @@
-import {Component} from '@angular/core';
-import {Observable} from './rx/Observable';
-import {Observer} from './interfaces/Observer';
-import {Subscribe} from './rx/Subscribe';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from './rx/Observable';
+import { Observer } from './interfaces/Observer';
+import { Subscribtion } from './rx/Subscribtion';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
   title = 'Advanced-Asynchronous-JavaScript';
 
   constructor() {
@@ -24,23 +25,41 @@ export class AppComponent {
     //   }
     // });
 
-    const bodyEl: Element = document.querySelector('body');
+    // const bodyEl: Element = document.querySelector('body');
+    //
+    // this.fromEvent('click', bodyEl).subscribe({
+    //   next: (value) => {
+    //     console.log('next', value);
+    //   },
+    //   error(e: any): void {
+    //     console.log('error');
+    //   },
+    //   complete(): void {
+    //     console.log('complete');
+    //   }
+    // });
+  }
 
-    this.fromEvent('click', bodyEl).subscribe({
-      next: (value) => {
-        console.log('next', value);
-      },
-      error(e: any): void {
-        console.log('error');
-      },
-      complete(): void {
-        console.log('complete');
-      }
-    });
+  ngOnInit(): void {
+    const fromEventSubscribe = this.fromEvent('click', document.getElementById('button'))
+      .map((event: Event) => {
+        return event.target;
+      })
+      .subscribe({
+        next: (eventTarget) => {
+          console.log('next', eventTarget);
+        },
+        error(e: any): void {
+          console.log('error');
+        },
+        complete(): void {
+          console.log('complete');
+        }
+      });
   }
 
   timeOut(time) {
-    return new Observable((observer: Observer): Subscribe => {
+    return new Observable((observer: Observer): Subscribtion => {
       const handle = setTimeout(() => {
         observer.next(null);
         observer.complete();
@@ -53,7 +72,7 @@ export class AppComponent {
   }
 
   fromEvent(eventName: string, element: Element): Observable {
-    return new Observable((observer: Observer): Subscribe => {
+    return new Observable((observer: Observer): Subscribtion => {
       const handler = (event) => {
         observer.next(event);
       };

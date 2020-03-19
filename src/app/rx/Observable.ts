@@ -1,15 +1,37 @@
-import {Observer} from '../interfaces/Observer';
+import { Observer } from '../interfaces/Observer';
+import { Subscribtion } from './Subscribtion';
 
 export class Observable {
 
-  constructor(subscribe) {
+  private _subscribe: (observer: Observer) => Subscribtion;
+
+  constructor(subscribe: (observer: Observer) => Subscribtion) {
     this._subscribe = subscribe;
   }
 
   subscribe(observer: Observer) {
-    this._subscribe(observer);
+    return this._subscribe(observer);
   }
 
-  private _subscribe(observer: Observer) {
+  map(projection: (a: any) => any) {
+    return new Observable((observer: Observer) => {
+      const previousSubscription = this.subscribe({
+        next: (result: any) => {
+          observer.next(projection(result));
+        },
+        error(e: any): void {
+          observer.error(e);
+        },
+        complete(): void {
+          observer.complete();
+        }
+      });
+
+      return {
+        unsubscribe: () => {
+          previousSubscription.unsubscribe();
+        }
+      };
+    });
   }
 }

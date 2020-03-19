@@ -1,4 +1,4 @@
-export class Subscribe {
+export class Subscribtion {
   unsubscribe(): void {
 
   }
