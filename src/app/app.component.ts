@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from './rx/Observable';
 import { Observer } from './interfaces/Observer';
 import { Subscribtion } from './rx/Subscribtion';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -57,24 +58,52 @@ export class AppComponent implements OnInit {
     //     }
     //   });
 
-    const fromEventSubscribe = this.fromEvent('click', document.querySelector('body'))
-      .map((event: any) => {
-        return event.clientX;
-      })
-      .filter((clientX: number) => {
-        return clientX > 50;
-      })
-      .subscribe({
-        next: (eventTarget) => {
-          console.log('next', eventTarget);
-        },
-        error(e: any): void {
-          console.log('error');
-        },
-        complete(): void {
-          console.log('complete');
-        }
-      });
+    // const fromEventSubscribe = this.fromEvent('click', document.querySelector('body'))
+    //   .map((event: any) => {
+    //     return event.clientX;
+    //   })
+    //   .filter((clientX: number) => {
+    //     return clientX > 50;
+    //   })
+    //   .subscribe({
+    //     next: (eventTarget) => {
+    //       console.log('next', eventTarget);
+    //     },
+    //     error(e: any): void {
+    //       console.log('error');
+    //     },
+    //     complete(): void {
+    //       console.log('complete');
+    //     }
+    //   });
+    //
+    // Observable.zip(
+    //   of(1),
+    //   of(2),
+    //   of(3)
+    // ).subscribe({
+    //   next(value: any): void {
+    //     console.log('zip', value);
+    //   },
+    //   error(error: any): void {
+    //   },
+    //   complete(): void {
+    //   }
+    // });
+
+    Observable.concat(
+      of(1, 2, 3),
+      of(4, 5, 6),
+      of(7, 8, 9)
+    ).subscribe({
+      next(value: any): void {
+        console.log('concat', value);
+      },
+      error(error: any): void {
+      },
+      complete(): void {
+      }
+    });
   }
 
   timeOut(time) {
