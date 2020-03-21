@@ -43,14 +43,17 @@ export class Observable {
   static concat(...obs: any[]) {
     return new Observable((observer: Observer) => {
       let currentObsCount = 0;
+      let subscription;
       executeObserver(obs, currentObsCount);
 
       function executeObserver(observerArray: Observable[], observerIndex: number) {
-        observerArray[observerIndex].subscribe({
+        subscription = observerArray[observerIndex].subscribe({
           next(value: any): void {
             observer.next(value);
           },
           error(error: any): void {
+            observer.error(error);
+            subscription.unsubscribe();
           },
           complete(): void {
             currentObsCount++;
@@ -65,7 +68,7 @@ export class Observable {
 
       return {
         unsubscribe(): void {
-          obs.forEach(observable => observable.unsubscribe());
+          subscription.unsubscribe();
         }
       };
     });
@@ -91,7 +94,7 @@ export class Observable {
     });
   }
 
-  filter(predicate: (a: any) => any) {
+  filter(predicate: (a: any) => any) { /*Predicate function - function that return boolean value*/
     return new Observable((observer: Observer) => {
       return this.subscribe({
         next: (prevResult: any) => {
