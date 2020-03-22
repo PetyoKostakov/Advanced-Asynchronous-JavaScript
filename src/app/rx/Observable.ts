@@ -113,4 +113,39 @@ export class Observable {
       });
     });
   }
+
+  retry(num) {
+    return new Observable((observer: Observer) => {
+      let numberOfTries = 0;
+      let subscription;
+
+      function handleSubscription() {
+        subscription = this.subscribe({
+          next(value: any): void {
+            observer.next(value);
+          },
+          error(error: any): void {
+            numberOfTries++;
+            if (numberOfTries === num) {
+              observer.error(error);
+            } else {
+              subscription.unsubscribe();
+              handleSubscription();
+            }
+          },
+          complete(): void {
+            observer.complete();
+          }
+        });
+      }
+
+      handleSubscription();
+
+      return {
+        unsubscribe(): void {
+          subscription.unsubscribe();
+        }
+      };
+    });
+  }
 }
