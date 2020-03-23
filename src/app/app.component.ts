@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from './rx/Observable';
-import { Observer } from './interfaces/Observer';
-import { Subscribtion } from './rx/Subscribtion';
-import { of } from 'rxjs';
+import { Observer } from './rx/Observer';
+import { Subscription } from './rx/Subscription.interface';
 
 @Component({
   selector: 'app-root',
@@ -91,23 +90,23 @@ export class AppComponent implements OnInit {
     //   }
     // });
 
-    Observable.concat(
-      of(1, 2, 3),
-      of(4, 5, 6),
-      of(7, 8, 9)
-    ).subscribe({
-      next(value: any): void {
-        console.log('concat', value);
-      },
-      error(error: any): void {
-      },
-      complete(): void {
-      }
-    });
+    // Observable.concat(
+    //   of(1, 2, 3),
+    //   of(4, 5, 6),
+    //   of(7, 8, 9)
+    // ).subscribe({
+    //   next(value: any): void {
+    //     console.log('concat', value);
+    //   },
+    //   error(error: any): void {
+    //   },
+    //   complete(): void {
+    //   }
+    // });
   }
 
   timeOut(time) {
-    return new Observable((observer: Observer): Subscribtion => {
+    return new Observable((observer: Observer): Subscription => {
       const handle = setTimeout(() => {
         observer.next(null);
         observer.complete();
@@ -120,7 +119,7 @@ export class AppComponent implements OnInit {
   }
 
   fromEvent(eventName: string, element: Element): Observable {
-    return new Observable((observer: Observer): Subscribtion => {
+    return new Observable((observer: Observer): Subscription => {
       const handler = (event) => {
         observer.next(event);
       };

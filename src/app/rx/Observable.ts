@@ -1,11 +1,11 @@
-import { Observer } from '../interfaces/Observer';
-import { Subscribtion } from './Subscribtion';
+import { Observer } from './Observer';
+import { Subscription } from './Subscription.interface';
 
 export class Observable {
 
-  private _subscribe: (observer: Observer) => Subscribtion;
+  private _subscribe: (observer: Observer) => Subscription;
 
-  constructor(subscribe: (observer: Observer) => Subscribtion) {
+  constructor(subscribe: (observer: Observer) => Subscription) {
     this._subscribe = subscribe;
   }
 
