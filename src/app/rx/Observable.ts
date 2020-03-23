@@ -74,6 +74,18 @@ export class Observable {
     });
   }
 
+  static of(value) {
+    return new Observable((observer: Observer) => {
+      observer.next(value);
+      observer.complete();
+
+      return {
+        unsubscribe(): void {
+        }
+      };
+    });
+  }
+
   subscribe(observer: Observer) {
     return this._subscribe(observer);
   }
@@ -146,6 +158,22 @@ export class Observable {
           subscription.unsubscribe();
         }
       };
+    });
+  }
+
+  observeOn(scheduler) {
+    return new Observable((observer: Observer) => {
+      return this.subscribe({
+        next(value: any): void {
+          scheduler(() => observer.next(value));
+        },
+        error(error: any): void {
+          scheduler(() => observer.error(error));
+        },
+        complete(): void {
+          scheduler(() => observer.complete());
+        }
+      });
     });
   }
 }

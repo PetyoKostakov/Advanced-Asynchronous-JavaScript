@@ -103,6 +103,19 @@ export class AppComponent implements OnInit {
     //   complete(): void {
     //   }
     // });
+
+    Observable
+      .of(5)
+      .observeOn(action => setTimeout(action, 5000))
+      .subscribe({
+        next(value: any): void {
+          console.log('of+observeOn - value', value);
+        },
+        error(error: any): void {
+        },
+        complete(): void {
+        }
+      });
   }
 
   timeOut(time) {
